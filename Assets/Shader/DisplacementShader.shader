@@ -2,7 +2,9 @@
 {
     Properties
     {
-       DisplacementTexture("DisplacementTexture", 2D) = "default"
+       DisplacementTexture("DisplacementTexture_Anzeige", 2D) = "default"
+       ColorTexture("Texture", 2D) = "default"
+       Scale("DisplacementScale", Float) = 0.1
     }
     SubShader
     {
@@ -31,16 +33,21 @@
             };
 
             sampler2D DisplacementTexture;
+            sampler2D ColorTexture;
+            float Scale;
 
             v2f vert(appdata v) {
                 v2f o;
 
-                float4 color = tex2Dlod( DisplacementTexture, float4(v.tex.x, v.tex.y, 0, 0) );
+                //float2 uv = (v.tex.xy * 3) % float2(1, 1);
+                float2 uv = v.tex.xy;
+
+                float4 color = tex2Dlod( DisplacementTexture, float4(uv, 0, 0) );
+                o.color = tex2Dlod( ColorTexture, float4(uv, 0, 0) );
 
                 o.vertex = v.vertex;
-                o.vertex.y += v.norm * length(color) * 0.1;
+                o.vertex.xyz += v.norm * color * Scale;
                 o.vertex = UnityObjectToClipPos( o.vertex );
-                o.color = color;
                 //o.vertex.y += Displacement;
 
                 return o;
