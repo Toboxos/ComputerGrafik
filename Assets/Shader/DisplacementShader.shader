@@ -2,7 +2,7 @@
 {
     Properties
     {
-       Displacement("Displacement", Float) = 0
+       DisplacementTexture("DisplacementTexture", 2D) = "default"
     }
     SubShader
     {
@@ -21,26 +21,33 @@
 			struct appdata
 			{
 				float4 vertex : POSITION;
-				float3 norm : NORMAL;
+				float2 tex : TEXCOORD0;
+                float4 norm : NORMAL;
 			};
 
             struct v2f {
                 float4 vertex : SV_POSITION;
+                float4 color : COLOR;
             };
 
-            float Displacement;
+            sampler2D DisplacementTexture;
 
             v2f vert(appdata v) {
                 v2f o;
 
-                o.vertex = UnityObjectToClipPos( v.vertex );
-                o.vertex.y += Displacement;
+                float4 color = tex2Dlod( DisplacementTexture, float4(v.tex.x, v.tex.y, 0, 0) );
+
+                o.vertex = v.vertex;
+                o.vertex.y += v.norm * length(color) * 0.1;
+                o.vertex = UnityObjectToClipPos( o.vertex );
+                o.color = color;
+                //o.vertex.y += Displacement;
 
                 return o;
             }
 
             fixed4 frag( v2f i ) : SV_Target {
-                return fixed4(255, 0, 0, 255);
+                return i.color;
             }
 
             ENDCG
