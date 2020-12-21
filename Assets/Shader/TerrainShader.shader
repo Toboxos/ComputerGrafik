@@ -63,7 +63,11 @@ Shader "Custom/TerrainShader"
             }
 
             fixed4 frag( v2f i ) : SV_Target {
-                return i.color * Albedo * ( UNITY_LIGHTMODEL_AMBIENT + max(0, dot( _WorldSpaceLightPos0, i.norm ) ) );
+                float iAmbient = UNITY_LIGHTMODEL_AMBIENT;                               // Ambient Light
+                float iDiffuse = Albedo * max(0, dot( _WorldSpaceLightPos0, i.norm ));   // Diffuse Light (Labmert)
+                float iSpecular = 0.0f;                                                  // Specular Light (Phong)
+
+                return i.color * ( iAmbient + iDiffuse + iSpecular );
             }
 
             ENDCG
