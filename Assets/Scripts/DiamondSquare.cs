@@ -7,30 +7,32 @@ using System.IO;
 
 public class DiamondSquare : MonoBehaviour
 {
-    private void Start()
-    {
-        diamondSquare(3, 243);
-    }
-
     Texture2D heightMap;
     Random randomGenerator;
-    int MaxRandom = 128;
+    public int TextureSize = 8;
+    public int MaxRandomNumber = 128;
+    public int Seed = 1234;
+
+    private void Start()
+    {
+        diamondSquare(TextureSize, Seed);
+    }
 
     // Start is called before the first frame update
     void diamondSquare(int Size, int seed)
     {
-        int size = Size * Size + 1;
+        int size = (int)Mathf.Pow(2,Size) + 1;
         heightMap = new Texture2D(size, size);
         randomGenerator = new Random(seed);
 
         //Preseed Corners with Values
-        float height = (float)randomGenerator.Next(MaxRandom)/MaxRandom;
+        float height = (float)randomGenerator.Next(MaxRandomNumber)/MaxRandomNumber;
         heightMap.SetPixel(0,0, new Color(height, height, height));
-        height = (float)randomGenerator.Next(MaxRandom) / MaxRandom;
+        height = (float)randomGenerator.Next(MaxRandomNumber) / MaxRandomNumber;
         heightMap.SetPixel(0,size-1, new Color(height, height, height));
-        height = (float)randomGenerator.Next(MaxRandom) / MaxRandom;
+        height = (float)randomGenerator.Next(MaxRandomNumber) / MaxRandomNumber;
         heightMap.SetPixel(size-1,0, new Color(height, height, height));
-        height = (float)randomGenerator.Next(MaxRandom) / MaxRandom;
+        height = (float)randomGenerator.Next(MaxRandomNumber) / MaxRandomNumber;
         heightMap.SetPixel(size-1,size-1, new Color(height, height, height));
 
 
@@ -39,13 +41,13 @@ public class DiamondSquare : MonoBehaviour
 
         while(reach >= 1)
         {
-            Debug.Log("While Reach: "+reach);
+            //Debug.Log("While Reach: "+reach);
             //Do Square Step
             for (int x = reach; x < heightMap.width; x += stepSize)
             {
                 for (int y = reach; y < heightMap.height; y += stepSize)
                 {
-                    Debug.Log("Square:" + x + ": " + y);
+                    //Debug.Log("Square:" + x + ": " + y);
                     squareStep(reach, x, y);
                 }
             }
@@ -62,14 +64,14 @@ public class DiamondSquare : MonoBehaviour
 
                 for (int y = startY; y < heightMap.height; y+= stepSize)
                 {
-                    Debug.Log("Diamond:"+ x + ": "+ y);
+                    //Debug.Log("Diamond:"+ x + ": "+ y);
                     diamondStep(reach, x, y);
                 }
             }
 
             reach /= 2;
             stepSize /= 2;
-            MaxRandom = Mathf.Min(MaxRandom / 2, 1);
+            MaxRandomNumber = Mathf.Max(MaxRandomNumber / 2, 1);
         }
 
         //ToDo: Debug Write out Bitmap
@@ -111,7 +113,7 @@ public class DiamondSquare : MonoBehaviour
             counter++;
         }
 
-        avg += (float)randomGenerator.Next(-MaxRandom, MaxRandom) / MaxRandom;
+        avg += (float)randomGenerator.Next(-MaxRandomNumber, MaxRandomNumber) / MaxRandomNumber;
         avg /= counter;
         //Debug.Log("Square Avg: "+avg);
         heightMap.SetPixel(x, y, new Color(avg, avg, avg));
@@ -152,7 +154,7 @@ public class DiamondSquare : MonoBehaviour
             counter++;
         }
 
-        avg += (float)randomGenerator.Next(-MaxRandom, MaxRandom) / MaxRandom;
+        avg += (float)randomGenerator.Next(-MaxRandomNumber, MaxRandomNumber) / MaxRandomNumber;
         avg /= counter;
         //Debug.Log("Diamond Avg: " + avg);
         heightMap.SetPixel(x, y, new Color(avg, avg, avg));
