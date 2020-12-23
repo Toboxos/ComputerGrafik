@@ -3,9 +3,10 @@ Shader "Custom/TerrainShader"
     Properties
     {
         _Albedo ("Albedo", Range(0, 1)) = 1.0
-        _DisplacementScale ("Displacement Scale", Range(0, 1)) = 0.5
+        _DisplacementScale ("Displacement Scale", Range(0, 10000)) = 0.5
         _DisplacementOffset ("Displacement Offset", Range(0, 1)) = 0.5
         _Shininess ("Shininess", Range(0, 1)) = 1.0
+        _FluidThreshold ("Flüssigkeits Grenzwert", Range(0, 1)) = 0.8
 
         _DisplacementTexture ("Displacement Texture", 2D) = "default"
         _ColorTexture ("Texture", 2D) = "default"
@@ -44,6 +45,7 @@ Shader "Custom/TerrainShader"
             sampler2D _DisplacementTexture;
             float _DisplacementScale;
             float _DisplacementOffset;
+            float _FluidThreshold;
 
             // Shading parameters
             sampler2D _ColorTexture;
@@ -57,14 +59,21 @@ Shader "Custom/TerrainShader"
                 float2 uv = v.tex.xy;
 
                 // Displacement Wert aus Textur
-                float4 color = tex2Dlod( _DisplacementTexture, float4(uv, 0, 0) );
+                fixed4 displacementColor = tex2Dlod( _DisplacementTexture, float4(uv, 0, 0) );
 
                 // Farb Wert aus Textur
                 o.color = tex2Dlod( _ColorTexture, float4(uv, 0, 0) );
 
+                if( displacementColor.x < _FluidThreshold ) {
+                    o.color = fixed4(0, 0, 255, 255);
+                    displacementColor.x = _FluidThreshold;
+                }
+
+                //if( o.color.x)
+
                 // Displacement
                 o.vertex = v.vertex;
-                o.vertex.xyz += v.norm * color * _DisplacementScale;
+                o.vertex.xyz += v.norm * displacementColor.x * _DisplacementScale;
                 o.vertex = UnityObjectToClipPos( o.vertex );
 
                 // Normale in Weltkoordinaten
