@@ -9,6 +9,7 @@ Shader "Custom/TerrainShader"
         _FluidThreshold ("Flüssigkeits Grenzwert", Range(0, 1)) = 0.8
 
         _DisplacementTexture ("Displacement Texture", 2D) = "default"
+        _MoistureTexture ("Moisture Texture", 2D) = "default"
         _ColorTexture ("Texture", 2D) = "default"
     }
     SubShader
@@ -37,8 +38,9 @@ Shader "Custom/TerrainShader"
 
             struct v2f {
                 float4 vertex : SV_POSITION;
-                float4 color : COLOR;
                 float3 norm : NORMAL;
+
+                float2 texCoord : TEXCOORD0;
             };
 
             // Displacement Parameters
@@ -48,6 +50,7 @@ Shader "Custom/TerrainShader"
             float _FluidThreshold;
 
             // Shading parameters
+            sampler2D _MoistureTexture;
             sampler2D _ColorTexture;
             float _Albedo;
             float _Shininess;
@@ -59,21 +62,20 @@ Shader "Custom/TerrainShader"
                 float2 uv = v.tex.xy;
 
                 // Displacement Wert aus Textur
-                fixed4 displacementColor = tex2Dlod( _DisplacementTexture, float4(uv, 0, 0) );
+                fixed displacement = tex2Dlod( _DisplacementTexture, float4(uv, 0, 0) ).x;
+                fixed moisture = tex2Dlod( _MoistureTexture, float4(uv, 0, 0) ).x;
 
-                // Farb Wert aus Textur
-                o.color = tex2Dlod( _ColorTexture, float4(uv, 0, 0) );
+                // Moisute and displacement are used for the texture coordinates at the color texture
+                o.texCoord = float2( moisture, displacement );
 
-                if( displacementColor.x < _FluidThreshold ) {
-                    o.color = fixed4(0, 0, 255, 255);
-                    displacementColor.x = _FluidThreshold;
+                // If displacement is below the fluid threshold move it up to the treshold
+                if( displacement < _FluidThreshold ) {
+                    displacement = _FluidThreshold;
                 }
-
-                //if( o.color.x)
 
                 // Displacement
                 o.vertex = v.vertex;
-                o.vertex.xyz += v.norm * displacementColor.x * _DisplacementScale;
+                o.vertex.xyz += v.norm * displacement * _DisplacementScale;
                 o.vertex = UnityObjectToClipPos( o.vertex );
 
                 // Normale in Weltkoordinaten
@@ -91,7 +93,15 @@ Shader "Custom/TerrainShader"
                 float x = max( 0, dot( h, i.norm ));
                 iSpecular = pow( x, _Shininess ) * (( _Shininess + 8 ) / 8 * 3.141 ) * _LightColor0;
 
-                return i.color * ( iAmbient + iDiffuse + iSpecular );
+                // Get color based on (moisture, displacement) from ColorTexture
+                fixed4 color = tex2D( _ColorTexture, i.texCoord );
+
+                // Set the color to water if beyond the water level
+                if( i.texCoord.y <= _FluidThreshold ) {
+                    color = fixed4(0, 0.4, 0.7, 1);
+                }
+
+                return color * ( iAmbient + iDiffuse + iSpecular );
             }
 
             ENDCG
