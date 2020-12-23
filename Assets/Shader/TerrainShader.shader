@@ -6,6 +6,7 @@ Shader "Custom/TerrainShader"
        ColorTexture("Texture", 2D) = "default"
        Scale( "DisplacementScale", Float ) = 0.1
        Albedo("Albedo", Float) = 1.0
+       Shininess("Shininess", Float) = 1.0
     }
     SubShader
     {
@@ -19,6 +20,7 @@ Shader "Custom/TerrainShader"
             #pragma fragment frag
 
             #include "UnityCG.cginc"
+            #include "UnityLightingCommon.cginc"
 
             // Input Struct for Vertex
 			struct appdata
@@ -38,6 +40,7 @@ Shader "Custom/TerrainShader"
             sampler2D ColorTexture;
             float Scale;
             float Albedo;
+            float Shininess;
 
             v2f vert(appdata v) {
                 v2f o;
@@ -66,6 +69,10 @@ Shader "Custom/TerrainShader"
                 float iAmbient = UNITY_LIGHTMODEL_AMBIENT;                               // Ambient Light
                 float iDiffuse = Albedo * max(0, dot( _WorldSpaceLightPos0, i.norm ));   // Diffuse Light (Labmert)
                 float iSpecular = 0.0f;                                                  // Specular Light (Phong)
+                
+                float h = normalize( _WorldSpaceCameraPos + _WorldSpaceLightPos0 );
+                float x = max( 0, dot( h, i.norm ));
+                iSpecular = pow( x, Shininess ) * (( Shininess + 8 ) / 8 * 3.141 ) * _LightColor0;
 
                 return i.color * ( iAmbient + iDiffuse + iSpecular );
             }
