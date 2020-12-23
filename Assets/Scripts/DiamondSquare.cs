@@ -19,7 +19,7 @@ public class DiamondSquare : MonoBehaviour
     }
 
     // Start is called before the first frame update
-    void diamondSquare(int Size, int seed)
+    public Texture2D diamondSquare(int Size, int seed)
     {
         int size = (int)Mathf.Pow(2,Size) + 1;
         heightMap = new Texture2D(size, size);
@@ -75,7 +75,9 @@ public class DiamondSquare : MonoBehaviour
         }
 
         //ToDo: Debug Write out Bitmap
-        File.WriteAllBytes("D:/Dokumente/Git Repositorys/ComputerGrafik/Assets/Scripts/tmp.png", heightMap.EncodeToPNG());
+        //File.WriteAllBytes("D:/Dokumente/Git Repositorys/ComputerGrafik/Assets/Scripts/tmp.png", heightMap.EncodeToPNG());
+
+        return heightMap;
     }
 
     void squareStep(int reach, int x, int y)

@@ -7,11 +7,11 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: DisplacementMaterial
-  m_Shader: {fileID: 4800000, guid: 945157aa20884794ebe6b853e17bac20, type: 3}
+  m_Name: Terrain
+  m_Shader: {fileID: 4800000, guid: b5b5975b95ecf4f40b76ea46375a685c, type: 3}
   m_ShaderKeywords: 
   m_LightmapFlags: 4
-  m_EnableInstancingVariants: 1
+  m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
   m_CustomRenderQueue: -1
   stringTagMap: {}
@@ -20,15 +20,19 @@ Material:
     serializedVersion: 3
     m_TexEnvs:
     - ColorTexture:
-        m_Texture: {fileID: 2800000, guid: 5192784e78d094743b2376a2bad7dd40, type: 3}
+        m_Texture: {fileID: 2800000, guid: 508bf8684c3501348aaa6d8271db3ae6, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - DisplacementTexture:
-        m_Texture: {fileID: 2800000, guid: 5192784e78d094743b2376a2bad7dd40, type: 3}
+        m_Texture: {fileID: 2800000, guid: ad85d1315bfa0d8489baf225252407ac, type: 3}
         m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 2, y: 2}
+        m_Offset: {x: 0, y: 0}
     - _BumpMap:
         m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _ColorTexture:
+        m_Texture: {fileID: 2800000, guid: 42f8be5bb3868a148be7bacf35234ab1, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _DetailAlbedoMap:
@@ -41,6 +45,10 @@ Material:
         m_Offset: {x: 0, y: 0}
     - _DetailNormalMap:
         m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _DisplacementTexture:
+        m_Texture: {fileID: 2800000, guid: 42f8be5bb3868a148be7bacf35234ab1, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _EmissionMap:
@@ -64,19 +72,26 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Floats:
-    - Displacement: -5
-    - Scale: 0.4
+    - Albedo: 0.2
+    - DisplacementOffset: 1
+    - Scale: 0.1
+    - _Albedo: 1
     - _BumpScale: 1
     - _Cutoff: 0.5
     - _DetailNormalMapScale: 1
+    - _DisplacementOffset: 0.373
+    - _DisplacementScale: 0.183
     - _DstBlend: 0
     - _GlossMapScale: 1
     - _Glossiness: 0.5
     - _GlossyReflections: 1
+    - _Ka: 0.5
+    - _Kd: 0.5
     - _Metallic: 0
     - _Mode: 0
     - _OcclusionStrength: 1
     - _Parallax: 0.02
+    - _Shininess: 1
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
     - _SrcBlend: 1
