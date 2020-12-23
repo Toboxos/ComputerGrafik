@@ -21,7 +21,7 @@ public class DiamondSquare : MonoBehaviour
     // Start is called before the first frame update
     void diamondSquare(int Size, int seed)
     {
-        int size = (int)Mathf.Pow(2,Size) + 1;
+        int size = (int)Mathf.Pow(2, Size); // - 1 Removed -> Make it Tileable
         heightMap = new Texture2D(size, size);
         randomGenerator = new Random(seed);
 
@@ -29,25 +29,18 @@ public class DiamondSquare : MonoBehaviour
         float height = (float)randomGenerator.Next(MaxRandomNumber)/MaxRandomNumber;
         heightMap.SetPixel(0,0, new Color(height, height, height));
         height = (float)randomGenerator.Next(MaxRandomNumber) / MaxRandomNumber;
-        heightMap.SetPixel(0,size-1, new Color(height, height, height));
-        height = (float)randomGenerator.Next(MaxRandomNumber) / MaxRandomNumber;
-        heightMap.SetPixel(size-1,0, new Color(height, height, height));
-        height = (float)randomGenerator.Next(MaxRandomNumber) / MaxRandomNumber;
-        heightMap.SetPixel(size-1,size-1, new Color(height, height, height));
 
 
-        int stepSize = size - 1;
+        int stepSize = size;
         int reach = stepSize / 2;
 
         while(reach >= 1)
         {
-            //Debug.Log("While Reach: "+reach);
             //Do Square Step
             for (int x = reach; x < heightMap.width; x += stepSize)
             {
                 for (int y = reach; y < heightMap.height; y += stepSize)
                 {
-                    //Debug.Log("Square:" + x + ": " + y);
                     squareStep(reach, x, y);
                 }
             }
@@ -64,7 +57,6 @@ public class DiamondSquare : MonoBehaviour
 
                 for (int y = startY; y < heightMap.height; y+= stepSize)
                 {
-                    //Debug.Log("Diamond:"+ x + ": "+ y);
                     diamondStep(reach, x, y);
                 }
             }
@@ -88,34 +80,26 @@ public class DiamondSquare : MonoBehaviour
         float avg = 0;
         int counter = 0;
 
+        int xPos = convertToCircularIndex(x + reach, heightMap.width);
+        int xNeg = convertToCircularIndex(x - reach, heightMap.width);
+        int yPos = convertToCircularIndex(y + reach, heightMap.width);
+        int yNeg = convertToCircularIndex(y - reach, heightMap.width);
+
         //Check A
-        if(x - reach >= 0 & y + reach < heightMap.height)
-        {
-            avg += heightMap.GetPixel(x - reach, y + reach).r;
-            counter++;
-        }
+        avg += heightMap.GetPixel( xNeg, yPos).r;
+        counter++;
         //Check B
-        if (x + reach < heightMap.width & y + reach < heightMap.height)
-        {
-            avg += heightMap.GetPixel(x + reach, y + reach).r;
-            counter++;
-        }
+        avg += heightMap.GetPixel(xPos, yPos).r;
+        counter++;
         //Check C
-        if (x - reach >= 0 & y - reach >= 0)
-        {
-            avg += heightMap.GetPixel(x - reach, y - reach).r;
-            counter++;
-        }
+        avg += heightMap.GetPixel(xNeg, yNeg).r;
+        counter++;
         //Check D
-        if (x + reach < heightMap.width & y - reach >= 0)
-        {
-            avg += heightMap.GetPixel(x + reach, y - reach).r;
-            counter++;
-        }
+        avg += heightMap.GetPixel(xPos, yNeg).r;
+        counter++;
 
         avg += (float)randomGenerator.Next(-MaxRandomNumber, MaxRandomNumber) / MaxRandomNumber;
         avg /= counter;
-        //Debug.Log("Square Avg: "+avg);
         heightMap.SetPixel(x, y, new Color(avg, avg, avg));
     }
 
@@ -129,34 +113,32 @@ public class DiamondSquare : MonoBehaviour
         float avg = 0;
         int counter = 0;
 
+        int xPos = convertToCircularIndex(x + reach, heightMap.width);
+        int xNeg = convertToCircularIndex(x - reach, heightMap.width);
+        int yPos = convertToCircularIndex(y + reach, heightMap.width);
+        int yNeg = convertToCircularIndex(y - reach, heightMap.width);
+
         //Check A
-        if (x - reach >= 0)
-        {
-            avg += heightMap.GetPixel(x - reach, y).r;
-            counter++;
-        }
+        avg += heightMap.GetPixel(xNeg, y).r;
+        counter++;
         //Check B
-        if (y + reach < heightMap.height)
-        {
-            avg += heightMap.GetPixel(x, y + reach).r;
-            counter++;
-        }
+        avg += heightMap.GetPixel(x, yPos).r;
+        counter++;
         //Check C
-        if (x + reach < heightMap.width)
-        {
-            avg += heightMap.GetPixel(x + reach, y ).r;
-            counter++;
-        }
+        avg += heightMap.GetPixel(xPos, y ).r;
+        counter++;
         //Check D
-        if (y - reach >= 0)
-        {
-            avg += heightMap.GetPixel(x, y - reach).r;
-            counter++;
-        }
+        avg += heightMap.GetPixel(x, yNeg).r;
+        counter++;
 
         avg += (float)randomGenerator.Next(-MaxRandomNumber, MaxRandomNumber) / MaxRandomNumber;
         avg /= counter;
-        //Debug.Log("Diamond Avg: " + avg);
         heightMap.SetPixel(x, y, new Color(avg, avg, avg));
+    }
+
+    int convertToCircularIndex(int index, int MaxLength)
+    {
+        int i = index % MaxLength;
+        return Mathf.Abs(i);
     }
 }
