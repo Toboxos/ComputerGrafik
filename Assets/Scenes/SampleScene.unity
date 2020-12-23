@@ -134,7 +134,7 @@ GameObject:
   - component: {fileID: 18107294}
   - component: {fileID: 18107293}
   m_Layer: 0
-  m_Name: GameObject
+  m_Name: MapGenerator
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -152,6 +152,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fbfc8750d939c2b41abeef8b38b3c0c1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  TextureSize: 8
+  MaxRandomNumber: 128
+  Seed: 5456456
 --- !u!4 &18107294
 Transform:
   m_ObjectHideFlags: 0
