@@ -154,7 +154,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   TextureSize: 8
   MaxRandomNumber: 128
-  Seed: 124
+  Seed: 5456456
 --- !u!4 &18107294
 Transform:
   m_ObjectHideFlags: 0
