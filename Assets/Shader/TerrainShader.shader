@@ -2,15 +2,19 @@ Shader "Custom/TerrainShader"
 {
     Properties
     {
-       DisplacementTexture("DisplacementTexture", 2D) = "default"
-       ColorTexture("Texture", 2D) = "default"
-       Scale( "DisplacementScale", Float ) = 0.1
-       Albedo("Albedo", Float) = 1.0
+        _Albedo ("Albedo", Range(0, 1)) = 1.0
+        _DisplacementScale ("Displacement Scale", Range(0, 1)) = 0.5
+        _DisplacementOffset ("Displacement Offset", Range(0, 1)) = 0.5
+
+        _DisplacementTexture ("Displacement Texture", 2D) = "default"
+        _ColorTexture ("Texture", 2D) = "default"
     }
     SubShader
     {
 
         Tags { "RenderType"="Opaque" }
+        LOD 100
+
         Pass
         {
             CGPROGRAM
@@ -34,10 +38,14 @@ Shader "Custom/TerrainShader"
                 float3 norm : NORMAL;
             };
 
-            sampler2D DisplacementTexture;
-            sampler2D ColorTexture;
-            float Scale;
-            float Albedo;
+            // Displacement Parameters
+            sampler2D _DisplacementTexture;
+            float _DisplacementScale;
+            float _DisplacementOffset;
+
+            // Shading parameters
+            sampler2D _ColorTexture;
+            float _Albedo;
 
             v2f vert(appdata v) {
                 v2f o;
@@ -46,14 +54,14 @@ Shader "Custom/TerrainShader"
                 float2 uv = v.tex.xy;
 
                 // Displacement Wert aus Textur
-                float4 color = tex2Dlod( DisplacementTexture, float4(uv, 0, 0) );
+                float4 color = tex2Dlod( _DisplacementTexture, float4(uv, 0, 0) );
 
                 // Farb Wert aus Textur
-                o.color = tex2Dlod( ColorTexture, float4(uv, 0, 0) );
+                o.color = tex2Dlod( _ColorTexture, float4(uv, 0, 0) );
 
                 // Displacement
                 o.vertex = v.vertex;
-                o.vertex.xyz += v.norm * color * Scale;
+                o.vertex.xyz += v.norm * color * _DisplacementScale;
                 o.vertex = UnityObjectToClipPos( o.vertex );
 
                 // Normale in Weltkoordinaten
@@ -64,7 +72,7 @@ Shader "Custom/TerrainShader"
 
             fixed4 frag( v2f i ) : SV_Target {
                 float iAmbient = UNITY_LIGHTMODEL_AMBIENT;                               // Ambient Light
-                float iDiffuse = Albedo * max(0, dot( _WorldSpaceLightPos0, i.norm ));   // Diffuse Light (Labmert)
+                float iDiffuse = _Albedo * max(0, dot( _WorldSpaceLightPos0, i.norm ));   // Diffuse Light (Labmert)
                 float iSpecular = 0.0f;                                                  // Specular Light (Phong)
 
                 return i.color * ( iAmbient + iDiffuse + iSpecular );
