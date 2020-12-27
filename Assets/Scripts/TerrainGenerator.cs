@@ -8,6 +8,7 @@ public class TerrainGenerator : MonoBehaviour
 
     public Material matPrefab;
     private DiamondSquare ds;
+    private MoistureGenerator mg;
 
     //Texture2D defaultTexture;
     void Start()
@@ -15,18 +16,25 @@ public class TerrainGenerator : MonoBehaviour
         Material newMat = Object.Instantiate( matPrefab );
         Renderer renderer = GetComponent<Renderer>();
 
+        int Size = 8;
+
         // Generate Displacement Texture with Diamond Square
         ds = new DiamondSquare();
-        int seed = Random.Range( 1, 200000 );
-        Texture2D tex = ds.diamondSquare(8, seed);
+        Texture2D displacementTex = ds.diamondSquare( Size, Random.Range( 1, 200000 ) );
 
         // TODO: Generate moisture texture with perlin noise
+        mg = new MoistureGenerator();
+        int pixelSize = (int) Mathf.Pow(2, Size);
+        mg.Init( pixelSize, pixelSize, 0, 0, 10 );
+        mg.CalcNoise();
+        Texture2D moistureTex = mg.NoiseTex;
 
         renderer.material = newMat;
-        renderer.material.SetTexture( "_DisplacementTexture", tex );
-        // TODO: set moisture texture from perlin noise
+        renderer.material.SetTexture( "_DisplacementTexture", displacementTex );
+        renderer.material.SetTexture( "_MoistureTexture", moistureTex );
 
-        tex.Apply();
+        displacementTex.Apply();
+        moistureTex.Apply();
     }
 
     // Update is called once per frame

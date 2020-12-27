@@ -16,23 +16,35 @@ public class MoistureGenerator : MonoBehaviour
     // over the width and height of the texture.
     public float scale = 1.0F;
 
+    public Texture2D NoiseTex { get{ return noiseTex; } }
     private Texture2D noiseTex;
     private Color[] pix;
-    private Renderer rend;
+    // private Renderer rend;
 
-    void Start()
+    public void Start()
     {
 
-        rend = GetComponent<Renderer>();
+        // rend = GetComponent<Renderer>();
 
         // Set up the texture and a Color array to hold pixels during processing.
         noiseTex = new Texture2D(pixWidth, pixHeight);
         pix = new Color[noiseTex.width * noiseTex.height];
-        rend.material.mainTexture = noiseTex;
-     
+        // rend.material.mainTexture = noiseTex;
     }
 
-    void CalcNoise()
+    public void Init( int pixWidth, int pixHeight, float xOrg, float yOrg, float scale ) {
+        this.pixWidth = pixWidth;
+        this.pixHeight = pixHeight;
+        this.xOrg = xOrg;
+        this.yOrg = yOrg;
+        this.scale = scale;
+
+
+        noiseTex = new Texture2D(pixWidth, pixHeight);
+        pix = new Color[noiseTex.width * noiseTex.height];
+    }
+
+    public void CalcNoise()
     {
         // For each pixel in the texture...
         for(float y = 0.0F; y < noiseTex.height; y++)
@@ -45,7 +57,6 @@ public class MoistureGenerator : MonoBehaviour
                 //einzelne Farbwerte werden an sample angepasst 1= weiß und 0= schwarz
                 pix[(int)y * noiseTex.width + (int)x] = new Color(sample, sample, sample);
             }
-            y++;
         }
 
         // Copy the pixel data to the texture and load it into the GPU.

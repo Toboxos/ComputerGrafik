@@ -2,7 +2,7 @@ Shader "Custom/TerrainShader"
 {
     Properties
     {
-        _DisplacementScale("Displacement Scale", Range(0, 10000)) = 0.5
+        _DisplacementScale("Displacement Scale", Range(0, 1000)) = 0.5
         _DisplacementOffset("Displacement Offset", Range(0, 1)) = 0.5
         _Shininess("Shininess", Range(1, 100)) = 1.0
         _FluidThreshold("Threshold for fluigd", Range(0, 1)) = 0.8
@@ -13,9 +13,9 @@ Shader "Custom/TerrainShader"
 
         _LightPos( "Position of Point Light", Vector ) = (0, 0, 0)
 
-        _DisplacementTexture ("Displacement Texture", 2D) = "default"
-        _MoistureTexture ("Moisture Texture", 2D) = "default"
-        _ColorTexture ("Color Texture", 2D) = "default"
+        _DisplacementTexture("Displacement Texture", 2D) = "default"
+        _MoistureTexture("Moisture Texture", 2D) = "default"
+        _ColorTexture("Color Texture", 2D) = "default"
     }
     SubShader
     {
