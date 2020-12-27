@@ -2,15 +2,20 @@ Shader "Custom/TerrainShader"
 {
     Properties
     {
-        _Albedo ("Albedo", Range(0, 1)) = 1.0
-        _DisplacementScale ("Displacement Scale", Range(0, 10000)) = 0.5
-        _DisplacementOffset ("Displacement Offset", Range(0, 1)) = 0.5
-        _Shininess ("Shininess", Range(0, 1)) = 1.0
-        _FluidThreshold ("Flüssigkeits Grenzwert", Range(0, 1)) = 0.8
+        _DisplacementScale("Displacement Scale", Range(0, 10000)) = 0.5
+        _DisplacementOffset("Displacement Offset", Range(0, 1)) = 0.5
+        _Shininess("Shininess", Range(1, 100)) = 1.0
+        _FluidThreshold("Threshold for fluigd", Range(0, 1)) = 0.8
+
+        _AmbientReflectivity( "Ambient Reflectivity", Range(0, 1) ) = 0.5
+        _DiffuseReflectivity( "Diffuse Reflectivity", Range(0, 1) ) = 0.5
+        _SpecularReflectivity( "Specular Reflectivity", Range(0, 1) ) = 0.5
+
+        _LightPos( "Position of Point Light", Vector ) = (0, 0, 0)
 
         _DisplacementTexture ("Displacement Texture", 2D) = "default"
         _MoistureTexture ("Moisture Texture", 2D) = "default"
-        _ColorTexture ("Texture", 2D) = "default"
+        _ColorTexture ("Color Texture", 2D) = "default"
     }
     SubShader
     {
@@ -38,9 +43,10 @@ Shader "Custom/TerrainShader"
 
             struct v2f {
                 float4 vertex : SV_POSITION;
+                float4 worldPosition : POSITIONT;
                 float3 norm : NORMAL;
-
-                float2 texCoord : TEXCOORD0;
+                float3 vectorToCamera : TEXCOORD0;
+                float2 texCoord : TEXCOORD1;
             };
 
             // Displacement Parameters
@@ -50,9 +56,9 @@ Shader "Custom/TerrainShader"
             float _FluidThreshold;
 
             // Shading parameters
-            sampler2D _MoistureTexture;
-            sampler2D _ColorTexture;
-            float _Albedo;
+            sampler2D _MoistureTexture, _ColorTexture;
+            float4 _LightPos;
+            float _AmbientReflectivity, _DiffuseReflectivity, _SpecularReflectivity;
             float _Shininess;
 
             v2f vert(appdata v) {
@@ -75,23 +81,37 @@ Shader "Custom/TerrainShader"
 
                 // Displacement
                 o.vertex = v.vertex;
-                o.vertex.xyz += v.norm * displacement * _DisplacementScale;
-                o.vertex = UnityObjectToClipPos( o.vertex );
+                o.vertex.xyz += normalize( v.norm ) * ( displacement / 255 ) * _DisplacementScale;
+
+                // Position in Weltkoordinaten
+                o.worldPosition = mul( unity_ObjectToWorld, v.vertex );
 
                 // Normale in Weltkoordinaten
-                o.norm = UnityObjectToWorldNormal( v.norm );
+                o.norm = normalize( UnityObjectToWorldNormal( v.norm ) );
+
+                // Sichtvector zu Kamera in Weltkoordinaten
+                o.vectorToCamera = normalize( WorldSpaceViewDir(o.vertex) );
+
+                // Vertex in view space transformieren
+                o.vertex = UnityObjectToClipPos( o.vertex );
 
                 return o;
             }
 
             fixed4 frag( v2f i ) : SV_Target {
-                float iAmbient = UNITY_LIGHTMODEL_AMBIENT;                                  // Ambient Light
-                float iDiffuse = _Albedo * max(0, dot( _WorldSpaceLightPos0, i.norm ));     // Diffuse Light (Labmert)
-                float iSpecular = 0.0f;                                                     // Specular Light (Phong)
+//                float4 lightDirection = normalize(i.position - _LightPos);
 
-                float h = normalize( _WorldSpaceCameraPos + _WorldSpaceLightPos0 );
-                float x = max( 0, dot( h, i.norm ));
-                iSpecular = pow( x, _Shininess ) * (( _Shininess + 8 ) / 8 * 3.141 ) * _LightColor0;
+                fixed4 vAmbient = UNITY_LIGHTMODEL_AMBIENT;                                             // Ambient Light
+                fixed4 vDiffuse = max(0, dot( _WorldSpaceLightPos0, i.norm )) * _LightColor0;           // Diffuse Light (Labmert)
+
+                float3 reflectedLightVector = reflect( normalize(-_WorldSpaceLightPos0.xyz), i.norm);   // Specular Light (Phong)
+                float x = max( 0, dot( reflectedLightVector, i.vectorToCamera ));
+                fixed4 vSpecular = pow( x, _Shininess ) * _LightColor0;
+
+                // If light shines on backside of vertex -> no specular reflection
+                if( dot( _WorldSpaceLightPos0, i.norm ) < 0 ) {
+                    vSpecular = fixed4(0, 0, 0, 0);
+                }
 
                 // Get color based on (moisture, displacement) from ColorTexture
                 fixed4 color = tex2D( _ColorTexture, i.texCoord );
@@ -101,7 +121,16 @@ Shader "Custom/TerrainShader"
                     color = fixed4(0, 0.4, 0.7, 1);
                 }
 
-                return color * ( iAmbient + iDiffuse + iSpecular );
+                // Specular (Reflection) on land is substantially lower than on water
+                else {
+                    vSpecular *= 0.0001;
+                }
+
+                // Calculated new light color based on ambient, diffuse and specular light
+                color *= ( _AmbientReflectivity * vAmbient + _DiffuseReflectivity * vDiffuse );
+                color += _SpecularReflectivity * vSpecular;
+
+                return color;
             }
 
             ENDCG
