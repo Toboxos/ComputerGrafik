@@ -49,6 +49,7 @@ Shader "Custom/TerrainShader"
 
             // Displacement Parameters
             sampler2D _DisplacementTexture;
+            float4 _DisplacementTexture_ST;
             float _DisplacementScale;
             float _DisplacementOffset;
             float _WaterLevel;
@@ -69,8 +70,8 @@ Shader "Custom/TerrainShader"
                 o.uvCoord = uv;
 
                 // Displacement Wert aus Textur
-                fixed displacement = tex2Dlod( _DisplacementTexture, float4(uv, 0, 0) ).x;
-                fixed moisture = tex2Dlod( _MoistureTexture, float4(uv, 0, 0) ).x;
+                fixed displacement = tex2Dlod( _DisplacementTexture, float4(TRANSFORM_TEX(uv, _DisplacementTexture), 0, 0) ).x;
+                fixed moisture = tex2Dlod( _MoistureTexture, float4(TRANSFORM_TEX(uv, _MoistureTexture), 0, 0) ).x;
 
                 // Moisture and displacement are used for accessing the color texture
                 o.terrainProperty = float2( moisture, displacement );
