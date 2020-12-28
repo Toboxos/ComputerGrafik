@@ -48,9 +48,9 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _DisplacementTexture:
-        m_Texture: {fileID: 0}
+        m_Texture: {fileID: 2800000, guid: a949d3e5547259e4d9939db055e0670f, type: 3}
         m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0.7, y: 1}
+        m_Offset: {x: 0, y: 1}
     - _EmissionMap:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
@@ -96,9 +96,9 @@ Material:
     - _BumpScale: 1
     - _Cutoff: 0.5
     - _DetailNormalMapScale: 1
-    - _DiffuseReflectivity: 0.5
+    - _DiffuseReflectivity: 0.61
     - _DisplacementOffset: 0.421
-    - _DisplacementScale: 93
+    - _DisplacementScale: 0.1
     - _DstBlend: 0
     - _FluidThreshold: 0.351
     - _GlossMapScale: 1
@@ -116,8 +116,8 @@ Material:
     - _SpecularReflectivity: 1
     - _SrcBlend: 1
     - _UVSec: 0
-    - _WaterLevel: 0.589
-    - _WaveAnimationSpeed: 2.14
+    - _WaterLevel: 0.418
+    - _WaveAnimationSpeed: 2.64
     - _X: 0
     - _Y: 0
     - _ZWrite: 1

@@ -67,7 +67,7 @@ public class DiamondSquare : MonoBehaviour
         }
 
         //ToDo: Debug Write out Bitmap
-        //File.WriteAllBytes("D:/Dokumente/Git Repositorys/ComputerGrafik/Assets/Scripts/tmp.png", heightMap.EncodeToPNG());
+        // File.WriteAllBytes("tmp.png", heightMap.EncodeToPNG());
 
         return heightMap;
     }
