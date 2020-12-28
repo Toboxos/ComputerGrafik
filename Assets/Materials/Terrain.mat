@@ -50,7 +50,7 @@ Material:
     - _DisplacementTexture:
         m_Texture: {fileID: 2800000, guid: a5bad90b9f9158247a9264c700698b48, type: 3}
         m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
+        m_Offset: {x: 0, y: 1}
     - _EmissionMap:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
@@ -68,7 +68,15 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _NormalMapTexture:
-        m_Texture: {fileID: 2800000, guid: 00ab0b6383ca398449ca3bb2257db41c, type: 3}
+        m_Texture: {fileID: 2800000, guid: f9107e0b1d6b3d24baf03242a3467785, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 1.19, y: 2}
+    - _NormalMapTexture1:
+        m_Texture: {fileID: 2800000, guid: 2873e1d5d49f5ba4aa0fc07e92c5f082, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _NormalMapTexture2:
+        m_Texture: {fileID: 2800000, guid: f9107e0b1d6b3d24baf03242a3467785, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _OcclusionMap:
@@ -90,9 +98,9 @@ Material:
     - _DetailNormalMapScale: 1
     - _DiffuseReflectivity: 0.5
     - _DisplacementOffset: 0.373
-    - _DisplacementScale: 0
+    - _DisplacementScale: 76
     - _DstBlend: 0
-    - _FluidThreshold: 0.921
+    - _FluidThreshold: 0.351
     - _GlossMapScale: 1
     - _Glossiness: 0.5
     - _GlossyReflections: 1
@@ -108,6 +116,7 @@ Material:
     - _SpecularReflectivity: 0.5
     - _SrcBlend: 1
     - _UVSec: 0
+    - _WaveAnimationSpeed: 1.03
     - _X: 0
     - _Y: 0
     - _ZWrite: 1

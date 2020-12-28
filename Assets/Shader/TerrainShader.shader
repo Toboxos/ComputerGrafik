@@ -7,16 +7,17 @@ Shader "Custom/TerrainShader"
         _Shininess("Shininess", Range(1, 100)) = 1.0
         _FluidThreshold("Threshold for fluigd", Range(0, 1)) = 0.8
 
+        _WaveAnimationSpeed( "Wave Animation Speed", Range(0.1, 10)) = 1
+
         _AmbientReflectivity( "Ambient Reflectivity", Range(0, 1) ) = 0.5
         _DiffuseReflectivity( "Diffuse Reflectivity", Range(0, 1) ) = 0.5
         _SpecularReflectivity( "Specular Reflectivity", Range(0, 1) ) = 0.5
 
-        _LightPos( "Position of Point Light", Vector ) = (0, 0, 0)
-
         _DisplacementTexture("Displacement Texture", 2D) = "default"
         _MoistureTexture("Moisture Texture", 2D) = "default"
         _ColorTexture("Color Texture", 2D) = "default"
-        _NormalMapTexture("Normal Map Texture", 2D) = "default"
+        _NormalMapTexture1("Normal Map Texture 1", 2D) = "default"
+        _NormalMapTexture2("Normal Map Texture 2", 2D) = "default"
     }
     SubShader
     {
@@ -61,10 +62,11 @@ Shader "Custom/TerrainShader"
             float _FluidThreshold;
 
             // Shading parameters
-            sampler2D _MoistureTexture, _ColorTexture, _NormalMapTexture;
-            float4 _LightPos;
+            sampler2D _MoistureTexture, _ColorTexture, _NormalMapTexture1, _NormalMapTexture2;
+            float4 _MoistureTexture_ST, _ColorTexture_ST, _NormalMapTexture1_ST, _NormalMapTexture2_ST;
             float _AmbientReflectivity, _DiffuseReflectivity, _SpecularReflectivity;
             float _Shininess;
+            float _WaveAnimationSpeed;
 
             v2f vert(appdata v) {
                 v2f o;
@@ -85,7 +87,7 @@ Shader "Custom/TerrainShader"
                     displacement = _FluidThreshold;
                 }
 
-                // Displacement
+                // // Displacement
                 o.vertex = v.vertex;
                 o.vertex.xyz += normalize( v.norm ) * ( displacement / 255 ) * _DisplacementScale;
 
@@ -104,7 +106,11 @@ Shader "Custom/TerrainShader"
                 // Sichtvector zu Kamera in Weltkoordinaten
                 o.vectorToCamera = normalize( WorldSpaceViewDir(o.vertex) );
 
+                // o.vertex = mul( unity_ObjectToWorld, v.vertex );
+                // o.vertex.xyz += normalize( o.norm ) * ( displacement / 255 ) * _DisplacementScale;
+
                 // Vertex in view space transformieren
+                // o.vertex = mul( UNITY_MATRIX_VP, o.vertex );
                 o.vertex = UnityObjectToClipPos( o.vertex );
 
                 return o;
@@ -112,8 +118,11 @@ Shader "Custom/TerrainShader"
 
             fixed4 frag( v2f i ) : SV_Target {
                 // Read normal from normal map
-                fixed3 normalMapValue = tex2D( _NormalMapTexture, i.uvCoord ).rgb;                      // Get rgb value from normal map
-                float3 normalTangentSpace = normalize( normalMapValue * 2.0 - 1.0 );                    // convert the rgb values (0 to 1) to normal vector values (-1 to 1)
+                fixed3 normalMapValue1 = tex2D( _NormalMapTexture1, i.uvCoord + _WaveAnimationSpeed * float2(_Time.x, 0) ).rgb;                      // Get rgb value from normal map
+                float3 normalTangentSpace1 = normalize( normalMapValue1 * 2.0 - 1.0 );                    // convert the rgb values (0 to 1) to normal vector values (-1 to 1)
+
+                fixed3 normalMapValue2 = tex2D( _NormalMapTexture2, i.uvCoord + _WaveAnimationSpeed * float2(0, _Time.x) ).rgb;                      // Get rgb value from normal map
+                float3 normalTangentSpace2 = normalize( normalMapValue2 * 2.0 - 1.0 );                    // convert the rgb values (0 to 1) to normal vector values (-1 to 1)
 
                 // Matrix for converting tangent to normal space
                 float3x3 Tangent2Normal = {
@@ -123,7 +132,7 @@ Shader "Custom/TerrainShader"
                 };
 
                 // Transform (rotate) normal from tangent space to normal space
-                float3 normal = mul( Tangent2Normal, normalTangentSpace );
+                float3 normal = mul( Tangent2Normal, normalize(normalTangentSpace1 + normalTangentSpace2) );
 
                 // not water
                 if( i.texCoord.y > _FluidThreshold ) {
