@@ -2,7 +2,7 @@ Shader "Custom/TerrainShader"
 {
     Properties
     {
-        _DisplacementScale( "Displacement Scale", Range(0, 1000) ) = 0.5
+        _DisplacementScale( "Displacement Scale", Range(0, 100) ) = 1
         _DisplacementOffset( "Displacement Offset", Range(0, 1) ) = 0.5
         _Shininess( "Shininess", Range(1, 100) ) = 1.0
         _WaterLevel( "Height of Water Level", Range(0, 1) ) = 0.8
@@ -100,7 +100,7 @@ Shader "Custom/TerrainShader"
                 // Use world position, where vertex is already scaled by model scale. Add the displacement to the scaled vertex position
                 // (otherwise displacement would be scaled too: scale * (vertex.pos + displacement))
                 o.vertex.w = 1;
-                o.vertex.xyz = o.worldPosition + normalize( o.normal ) * ( displacement / 255 ) * _DisplacementScale;
+                o.vertex.xyz = o.worldPosition + normalize( o.normal ) * ( displacement / 255 ) * _DisplacementScale * 500; // 500 ~ size of 1 unit in unity
 
                 // Transform to projection space
                 o.vertex = mul( UNITY_MATRIX_VP, o.vertex );
