@@ -18,6 +18,7 @@ public class PlayerController : MonoBehaviour
     public float PitchSpeed = 15;
 
     //Uboat
+    public float ResetTurningRate = 50;
     public float UboatYawSpeed = 15;
 
     //Plane
@@ -39,10 +40,20 @@ public class PlayerController : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
         rigidbody.velocity = transform.forward * Speed;
         animator.SetBool("isUboat", isUboat);
+
+        if (isUboat)
+        {
+            Vector3 TargetRotation = transform.rotation.eulerAngles;
+
+            //Angle Move Back to Z 90°
+            TargetRotation.z = 90;
+
+            rigidbody.MoveRotation(Quaternion.Lerp(transform.rotation, Quaternion.Euler(TargetRotation), Time.deltaTime * ResetTurningRate));
+        }
 
         //Move Forward
         if (Input.GetKey(KeyCode.W))
@@ -84,7 +95,4 @@ public class PlayerController : MonoBehaviour
             }
         }
     }
-
-    // Limit Y Movement to Sphere
-    //Rotate around Offset instead of Using 
 }
