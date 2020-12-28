@@ -15,8 +15,10 @@ public class PlayerController : MonoBehaviour
 
     public bool isUboat = true;
 
+    public float PitchSpeed = 15;
+
     //Uboat
-    public float UboatPitchSpeed = 15;
+    public float UboatYawSpeed = 15;
 
     //Plane
     public float PlaneRollSpeed = 10;
@@ -45,39 +47,39 @@ public class PlayerController : MonoBehaviour
         //Move Forward
         if (Input.GetKey(KeyCode.W))
         {
-            Quaternion deltaRotation = Quaternion.Euler(Vector3.down * UboatPitchSpeed * Time.deltaTime);
+            Quaternion deltaRotation = Quaternion.Euler(Vector3.up * -PitchSpeed * Time.deltaTime);
             rigidbody.MoveRotation(rigidbody.rotation * deltaRotation);
         }
+        if (Input.GetKey(KeyCode.S))
+        {
+            Quaternion deltaRotation = Quaternion.Euler(Vector3.up * PitchSpeed * Time.deltaTime);
+            rigidbody.MoveRotation(rigidbody.rotation * deltaRotation);
+        }
+
         if (Input.GetKey(KeyCode.A))
         {
             if (isUboat)
             {
-                //TODO: Rotate to World Space instead of Local Space
-                Quaternion deltaRotation = Quaternion.Euler(Vector3.left * UboatPitchSpeed * Time.deltaTime);
-                rigidbody.MoveRotation(rigidbody.rotation * deltaRotation);
+                Quaternion deltaRotation = Quaternion.Euler(Vector3.up * -UboatYawSpeed * Time.deltaTime);
+                rigidbody.MoveRotation(deltaRotation * rigidbody.rotation);
             }
             else
             {
-                Quaternion deltaRotation = Quaternion.Euler(Vector3.back * PlaneRollSpeed * Time.deltaTime);
+                Quaternion deltaRotation = Quaternion.Euler(Vector3.back * -PlaneRollSpeed * Time.deltaTime);
                 rigidbody.MoveRotation(rigidbody.rotation * deltaRotation);
             }
-        }
-        if (Input.GetKey(KeyCode.S))
-        {
-            Quaternion deltaRotation = Quaternion.Euler(Vector3.up * UboatPitchSpeed * Time.deltaTime);
-            rigidbody.MoveRotation(rigidbody.rotation * deltaRotation);
         }
         if (Input.GetKey(KeyCode.D))
         {
             if (isUboat)
             {
                 //TODO: Rotate to World Space instead of Local Space
-                Quaternion deltaRotation = Quaternion.Euler(Vector3.right * UboatPitchSpeed * Time.deltaTime);
-                rigidbody.MoveRotation(rigidbody.rotation * deltaRotation);
+                Quaternion deltaRotation = Quaternion.Euler(Vector3.up * UboatYawSpeed * Time.deltaTime);
+                rigidbody.MoveRotation(deltaRotation * rigidbody.rotation);
             }
             else
             {
-                Quaternion deltaRotation = Quaternion.Euler(Vector3.forward * PlaneRollSpeed * Time.deltaTime);
+                Quaternion deltaRotation = Quaternion.Euler(Vector3.back * PlaneRollSpeed * Time.deltaTime);
                 rigidbody.MoveRotation(rigidbody.rotation * deltaRotation);
             }
         }
