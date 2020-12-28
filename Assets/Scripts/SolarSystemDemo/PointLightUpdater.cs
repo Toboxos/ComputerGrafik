@@ -2,16 +2,16 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PointLightUpdater : MonoBehaviour
-{
-    public Light pointLight;
+public class PointLightUpdater : MonoBehaviour {
 
+    private Light pointLight;
     private Renderer renderer;
 
     // Start is called before the first frame update
     void Start()
     {
         renderer = GetComponent<Renderer>();
+        pointLight = gameObject.transform.parent.Find("Sun").Find("Point Light").GetComponent<Light>();
     }
 
     // Update is called once per frame

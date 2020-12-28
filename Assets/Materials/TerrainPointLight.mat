@@ -40,7 +40,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _DisplacementTexture:
-        m_Texture: {fileID: 2800000, guid: a5bad90b9f9158247a9264c700698b48, type: 3}
+        m_Texture: {fileID: 2800000, guid: 7d9c39f9f90898043b6381dafc231e4b, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _EmissionMap:
@@ -76,13 +76,13 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Floats:
-    - _AmbientReflectivity: 0
+    - _AmbientReflectivity: 0.313
     - _BumpScale: 1
     - _Cutoff: 0.5
     - _DetailNormalMapScale: 1
-    - _DiffuseReflectivity: 0
+    - _DiffuseReflectivity: 0.372
     - _DisplacementOffset: 0.5
-    - _DisplacementScale: 0.5
+    - _DisplacementScale: 0.2
     - _DstBlend: 0
     - _GlossMapScale: 1
     - _Glossiness: 0.5
@@ -91,18 +91,18 @@ Material:
     - _Mode: 0
     - _OcclusionStrength: 1
     - _Parallax: 0.02
-    - _Shininess: 1
+    - _Shininess: 80.2
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
     - _SpecularReflectivity: 1
     - _SrcBlend: 1
     - _UVSec: 0
-    - _WaterLevel: 0.8
-    - _WaveAnimationSpeed: 1
+    - _WaterLevel: 0.066
+    - _WaveAnimationSpeed: 0.16
     - _ZWrite: 1
     m_Colors:
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
-    - _LightColor: {r: 0.8962264, g: 0.26884654, b: 0.029592399, a: 1}
-    - _LightSource: {r: 0, g: 200, b: 0, a: 1}
-    - _WaterColor: {r: 0, g: 0.4, b: 0.7, a: 1}
+    - _LightColor: {r: 0.05660379, g: 0.05660379, b: 0.05660379, a: 0}
+    - _LightSource: {r: 0, g: 0, b: 0, a: 1}
+    - _WaterColor: {r: 0.014417935, g: 0.33962262, b: 0.3064226, a: 1}
