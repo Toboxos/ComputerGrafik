@@ -9,6 +9,7 @@ public class TerrainGenerator : MonoBehaviour
     public Material matPrefab;
     private DiamondSquare ds;
     private MoistureGenerator mg;
+    public Transform Player;
 
     //Texture2D defaultTexture;
     void Start()
@@ -41,7 +42,9 @@ public class TerrainGenerator : MonoBehaviour
     void Update()
     {
         Renderer renderer = GetComponent<Renderer>();
-        // renderer.material.SetTextureOffset( "_DisplacementTexture", new Vector2(0, 0.2f * Time.realtimeSinceStartup) );
-        // renderer.material.SetTextureOffset( "_MoistureTexture", new Vector2(0, 0.2f * Time.realtimeSinceStartup) );
+
+        Vector2 PlayerOffset = new Vector2(Player.position.x/renderer.bounds.size.x, Player.position.z/ renderer.bounds.size.z);
+        renderer.material.SetTextureOffset( "_DisplacementTexture", PlayerOffset);
+        renderer.material.SetTextureOffset( "_MoistureTexture", PlayerOffset);
     }
 }
