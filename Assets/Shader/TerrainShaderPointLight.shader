@@ -1,4 +1,4 @@
-Shader "Custom/TerrainShader"
+Shader "Custom/TerrainShaderPointLight"
 {
     Properties
     {
@@ -9,6 +9,9 @@ Shader "Custom/TerrainShader"
 
         _WaveAnimationSpeed( "Wave Animation Speed", Range(0.1, 10) ) = 1
         _WaterColor( "Color of the Water", Color ) = (0, 0.4, 0.7, 1)
+
+        _LightSource( "Position of Light Source", Vector ) = (0, 0, 0)
+        _LightColor( "Color of Light Source", Color ) = (1, 1, 1)
 
         _AmbientReflectivity( "Ambient Reflectivity", Range(0, 1) ) = 0.5
         _DiffuseReflectivity( "Diffuse Reflectivity", Range(0, 1) ) = 0.5
@@ -57,10 +60,11 @@ Shader "Custom/TerrainShader"
             // Shading parameters
             sampler2D _MoistureTexture, _ColorTexture, _NormalMapTexture1, _NormalMapTexture2;
             float4 _MoistureTexture_ST, _ColorTexture_ST, _NormalMapTexture1_ST, _NormalMapTexture2_ST;
+            float3 _LightSource;
             float _AmbientReflectivity, _DiffuseReflectivity, _SpecularReflectivity;
             float _Shininess;
             float _WaveAnimationSpeed;
-            fixed4 _WaterColor;
+            fixed4 _WaterColor, _LightColor;
 
             v2f vert(appdata_tan v) {
                 v2f o;
@@ -94,7 +98,7 @@ Shader "Custom/TerrainShader"
                 o.bitangent = cross(o.normal, o.tangent);
 
                 // Direction from vertex to camera
-                o.vectorToCamera = normalize( WorldSpaceViewDir(o.vertex) );
+                o.vectorToCamera = normalize( WorldSpaceViewDir(v.vertex) );
 
                 // Displacement
                 // Use world position, where vertex is already scaled by model scale. Add the displacement to the scaled vertex position
@@ -132,15 +136,18 @@ Shader "Custom/TerrainShader"
                     normal = i.normal;
                 }
 
-                fixed4 vAmbient = UNITY_LIGHTMODEL_AMBIENT;                                             // Ambient Light
-                fixed4 vDiffuse = max(0, dot( _WorldSpaceLightPos0, normal )) * _LightColor0;           // Diffuse Light (Labmert)
+                // Get the direction where the light rays from the light source are coming
+                float3 lightDirection = _LightSource - i.worldPosition;
 
-                float3 reflectedLightVector = reflect( normalize(-_WorldSpaceLightPos0.xyz), normal );  // Specular Light (Phong)
+                fixed4 vAmbient = UNITY_LIGHTMODEL_AMBIENT;                                             // Ambient Light
+                fixed4 vDiffuse = max(0, dot( lightDirection, normal )) * _LightColor;           // Diffuse Light (Labmert)
+
+                float3 reflectedLightVector = reflect( normalize(-lightDirection.xyz), normal );  // Specular Light (Phong)
                 float x = max( 0, dot( reflectedLightVector, i.vectorToCamera ));
-                fixed4 vSpecular = pow( x, _Shininess ) * _LightColor0;
+                fixed4 vSpecular = pow( x, _Shininess ) * _LightColor;
 
                 // If light shines on backside of vertex -> no specular reflection
-                if( dot( _WorldSpaceLightPos0, normal ) < 0 ) {
+                if( dot( lightDirection, normal ) < 0 ) {
                     vSpecular = fixed4(0, 0, 0, 0);
                 }
 

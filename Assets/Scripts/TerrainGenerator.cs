@@ -40,5 +40,8 @@ public class TerrainGenerator : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        Renderer renderer = GetComponent<Renderer>();
+        // renderer.material.SetTextureOffset( "_DisplacementTexture", new Vector2(0, 0.2f * Time.realtimeSinceStartup) );
+        // renderer.material.SetTextureOffset( "_MoistureTexture", new Vector2(0, 0.2f * Time.realtimeSinceStartup) );
     }
 }
