@@ -94,7 +94,7 @@ Shader "Custom/TerrainShader"
                 o.bitangent = cross(o.normal, o.tangent);
 
                 // Direction from vertex to camera
-                o.vectorToCamera = normalize( WorldSpaceViewDir(o.vertex) );
+                o.vectorToCamera = normalize( WorldSpaceViewDir(v.vertex) );
 
                 // Displacement
                 // Use world position, where vertex is already scaled by model scale. Add the displacement to the scaled vertex position
