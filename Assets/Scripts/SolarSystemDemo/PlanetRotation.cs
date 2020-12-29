@@ -13,13 +13,13 @@ public class PlanetRotation : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        sun = transform.parent.Find("Sun").gameObject;
+        sun = transform.parent.Find( "Sun" ).gameObject;
     }
 
     // Update is called once per frame
     void Update()
     {
-        if( Input.GetKeyDown("space") ) {
+        if( Input.GetKeyDown( "space" )) {
             paused = !paused;
         }
 
@@ -28,7 +28,7 @@ public class PlanetRotation : MonoBehaviour
             transform.RotateAround( sun.transform.position, Vector3.up, Speed * Time.deltaTime );
 
             // Rotation arround itself
-            transform.Rotate( Vector3.right, Speed * Time.deltaTime );
+            transform.Rotate( Vector3.right, 2 * Speed * Time.deltaTime );
         }
     }
 }

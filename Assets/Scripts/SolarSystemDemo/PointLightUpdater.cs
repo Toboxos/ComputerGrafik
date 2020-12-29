@@ -11,12 +11,13 @@ public class PointLightUpdater : MonoBehaviour {
     void Start()
     {
         renderer = GetComponent<Renderer>();
-        pointLight = gameObject.transform.parent.Find("Sun").Find("Point Light").GetComponent<Light>();
+        pointLight = gameObject.transform.parent.Find( "Sun" ).Find( "Point Light" ).GetComponent<Light>();
     }
 
     // Update is called once per frame
     void Update()
     {
+        // Update Light source paramters on shader
         renderer.material.SetVector( "_LightSource", pointLight.transform.position );
         renderer.material.SetColor( "_LightColor", pointLight.color );
     }
