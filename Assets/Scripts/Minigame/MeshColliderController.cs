@@ -3,44 +3,52 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using UnityEngine;
 
-[ExecuteInEditMode]
+
 public class MeshColliderController : MonoBehaviour
 {
     private MeshCollider collider;
     private Mesh mesh;
+    private Renderer renderer;
+
+    Texture2D displacementTex = null;
 
     // Start is called before the first frame update
     void OnEnable()
     {
 
         collider = GetComponent<MeshCollider>();
+        renderer = GetComponent<Renderer>();
         mesh = Instantiate<Mesh>( GetComponent<MeshFilter>().sharedMesh );
-
-        Vector3[] verts = mesh.vertices;
-        Stopwatch stopwatch = new Stopwatch();
-
-        stopwatch.Start();
-        for( int i = 0; i < verts.Length; ++i ) {
-            verts[i] += new Vector3(0, Random.Range(10.0f, 20.0f), 0);
-        }
-        mesh.vertices = verts;
-        stopwatch.Stop();
-
-        UnityEngine.Debug.Log( stopwatch.ElapsedMilliseconds + "ms elapsed" );
-
-        collider.sharedMesh = mesh;
     }
 
     // Update is called once per frame
     void Update()
     {
-        // Mesh mesh = collider.sharedMesh;
+        Vector2 offset = renderer.material.GetTextureOffset( "_DisplacementTexture" );
+        float displacementScale = renderer.material.GetFloat( "_DisplacementScale" );
 
-        // Debug.Log( mesh.vertices.Length );
+        if( displacementTex == null ) {
+            displacementTex = (Texture2D) renderer.material.GetTexture( "_DisplacementTexture" );
+        }
 
-        // for( int i = 0; i < mesh.vertices.Length; ++i ) {
-        //     mesh.vertices[i] += new Vector3(0, Random.Range(0, 10), 0);
-        // }
+        Vector3[] verts = mesh.vertices;
+        Vector2[] uv = mesh.uv;
+        Stopwatch stopwatch = new Stopwatch();
+
+        stopwatch.Start();
+        for( int i = 0; i < verts.Length; ++i ) {
+            Vector3 vert = verts[i];
+            if( Mathf.Abs(vert.x) > 0.2 || Mathf.Abs(vert.z) > 0.2 ) continue;
+
+            Color displacementColor = displacementTex.GetPixelBilinear( uv[i].x + offset.x, uv[i].y + offset.y );
+            verts[i] = new Vector3( vert.x, displacementColor.r * displacementScale , vert.z );
+        }
+
+        mesh.vertices = verts;
+        stopwatch.Stop();
+
+        UnityEngine.Debug.Log( stopwatch.ElapsedMilliseconds + "ms elapsed" );
+        collider.sharedMesh = mesh;
 
     }
 }
