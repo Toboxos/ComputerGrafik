@@ -22,6 +22,8 @@ public class PlayerController : MonoBehaviour
     public GameObject Terrain;
     public Transform WaterPlane;
 
+    public GameObject PanelCollision;
+
     private Vector2 LastPositon;
     private Vector2 Position;
 
@@ -38,6 +40,7 @@ public class PlayerController : MonoBehaviour
     {
         Debug.Log( "Hit Something" );
         Debug.Log( "EXPLOSION BRIADSASDASDASFDASGF BUUUUUM" );
+        PanelCollision.SetActive( true );
     }
 
     // Update is called once per frame

@@ -20,6 +20,6 @@ public class MenuScript : MonoBehaviour
     }
 
     public void setActive( bool active ) {
-        gameObject.active = active;
+        gameObject.SetActive( active );
     }
 }
