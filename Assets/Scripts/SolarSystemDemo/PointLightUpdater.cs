@@ -17,6 +17,7 @@ public class PointLightUpdater : MonoBehaviour {
     // Update is called once per frame
     void Update()
     {
+        // Update Light source paramters on shader
         renderer.material.SetVector( "_LightSource", pointLight.transform.position );
         renderer.material.SetColor( "_LightColor", pointLight.color );
     }

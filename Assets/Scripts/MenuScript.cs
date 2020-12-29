@@ -14,4 +14,12 @@ public class MenuScript : MonoBehaviour
     {
         Application.Quit( 0 );
     }
+
+    public void CloseUI() {
+
+    }
+
+    public void setActive( bool active ) {
+        gameObject.active = active;
+    }
 }

@@ -28,7 +28,7 @@ public class PlanetRotation : MonoBehaviour
             transform.RotateAround( sun.transform.position, Vector3.up, Speed * Time.deltaTime );
 
             // Rotation arround itself
-            transform.Rotate( Vector3.right, Speed * Time.deltaTime );
+            transform.Rotate( Vector3.right, 2 * Speed * Time.deltaTime );
         }
     }
 }
