@@ -2,16 +2,16 @@ Shader "Custom/TerrainShaderPointLight"
 {
     Properties
     {
-        _DisplacementScale( "Displacement Scale", Range(0, 100) ) = 1
-        _DisplacementOffset( "Displacement Offset", Range(0, 1) ) = 0.5
-        _Shininess( "Shininess", Range(1, 100) ) = 1.0
-        _WaterLevel( "Height of Water Level", Range(0, 1) ) = 0.8
+        _DisplacementScale( "Displacement Scale", Range( 0, 100 ) ) = 1
+        _DisplacementOffset( "Displacement Offset", Range( 0, 1 ) ) = 0.5
+        _Shininess( "Shininess", Range( 1, 100 ) ) = 1.0
+        _WaterLevel( "Height of Water Level", Range( 0, 1 ) ) = 0.8
 
-        _WaveAnimationSpeed( "Wave Animation Speed", Range(0.1, 10) ) = 1
-        _WaterColor( "Color of the Water", Color ) = (0, 0.4, 0.7, 1)
+        _WaveAnimationSpeed( "Wave Animation Speed", Range( 0.1, 10 ) ) = 1
+        _WaterColor( "Color of the Water", Color ) = ( 0, 0.4, 0.7, 1 )
 
-        _LightSource( "Position of Light Source", Vector ) = (0, 0, 0)
-        _LightColor( "Color of Light Source", Color ) = (1, 1, 1)
+        _LightSource( "Position of Light Source", Vector ) = ( 0, 0, 0 )
+        _LightColor( "Color of Light Source", Color ) = ( 1, 1, 1 )
 
         _AmbientReflectivity( "Ambient Reflectivity", Range(0, 1) ) = 0.5
         _DiffuseReflectivity( "Diffuse Reflectivity", Range(0, 1) ) = 0.5
@@ -68,7 +68,7 @@ Shader "Custom/TerrainShaderPointLight"
             float _WaveAnimationSpeed;
             fixed4 _WaterColor, _LightColor;
 
-            v2f vert(appdata_tan v) {
+            v2f vert( appdata_tan v ) {
                 v2f o;
 
                 // Textur-Koordinate
@@ -76,8 +76,8 @@ Shader "Custom/TerrainShaderPointLight"
                 o.uvCoord = uv;
 
                 // Displacement Wert aus Textur
-                fixed displacement = tex2Dlod( _DisplacementTexture, float4(TRANSFORM_TEX(uv, _DisplacementTexture), 0, 0) ).x;
-                fixed moisture = tex2Dlod( _MoistureTexture, float4(TRANSFORM_TEX(uv, _MoistureTexture), 0, 0) ).x;
+                fixed displacement = tex2Dlod( _DisplacementTexture, float4( TRANSFORM_TEX( uv, _DisplacementTexture ), 0, 0 )).r;
+                fixed moisture = tex2Dlod( _MoistureTexture, float4( TRANSFORM_TEX( uv, _MoistureTexture ), 0, 0 )).r;
 
                 // Moisture and displacement are used for accessing the color texture
                 o.terrainProperty = float2( moisture, displacement );
@@ -91,22 +91,22 @@ Shader "Custom/TerrainShaderPointLight"
                 o.worldPosition = mul( unity_ObjectToWorld, v.vertex );
 
                 // Normal in world coordinates
-                o.normal = normalize( UnityObjectToWorldNormal( v.normal ) );
+                o.normal = normalize( UnityObjectToWorldNormal( v.normal ));
 
                 // Tangent in world coordinates
-                o.tangent = normalize( UnityObjectToWorldDir( v.tangent ) );
+                o.tangent = normalize( UnityObjectToWorldDir( v.tangent ));
 
                 // Bitangent in world coordiantes (because other vectors are in world coordinates )
-                o.bitangent = cross(o.normal, o.tangent);
+                o.bitangent = cross( o.normal, o.tangent );
 
                 // Direction from vertex to camera
-                o.vectorToCamera = normalize( WorldSpaceViewDir(v.vertex) );
+                o.vectorToCamera = normalize( WorldSpaceViewDir( v.vertex ));
 
                 // Displacement
                 // Use world position, where vertex is already scaled by model scale. Add the displacement to the scaled vertex position
                 // (otherwise displacement would be scaled too: scale * (vertex.pos + displacement))
                 o.vertex.w = 1;
-                o.vertex.xyz = o.worldPosition + normalize( o.normal ) * displacement * _DisplacementScale;
+                o.vertex.xyz = o.worldPosition + normalize( o.normal ) * displacement * _DisplacementScale * 2.0; // Multiply by ~2.0 to match unity transform units
 
                 // Transform to projection space
                 o.vertex = mul( UNITY_MATRIX_VP, o.vertex );
@@ -117,10 +117,10 @@ Shader "Custom/TerrainShaderPointLight"
             fixed4 frag( v2f i ) : SV_Target {
 
                 // Read and normalize normals from both water normal maps
-                fixed3 val1 = tex2D( _NormalMapTexture1, i.uvCoord * float2(10, 10) + _WaveAnimationSpeed * _Time.xx ).rgb;
+                fixed3 val1 = tex2D( _NormalMapTexture1, i.uvCoord * float2( 10, 10 ) + _WaveAnimationSpeed * _Time.xx ).rgb;
                 float3 normal1 = normalize( val1 * 2.0 - 1.0 );
 
-                fixed3 val2 = tex2D( _NormalMapTexture2, i.uvCoord * float2(10, 10) + _WaveAnimationSpeed * -_Time.xx ).rgb;
+                fixed3 val2 = tex2D( _NormalMapTexture2, i.uvCoord * float2( 10, 10 ) + _WaveAnimationSpeed * -_Time.xx ).rgb;
                 float3 normal2 = normalize( val2 * 2.0 - 1.0 );
 
                 // Matrix for converting tangent to normal space
@@ -131,10 +131,10 @@ Shader "Custom/TerrainShaderPointLight"
                 };
 
                 // Transform (rotate) combined normal from both normal maps from tangent space to normal space
-                float3 normal = mul( Tangent2Normal, normalize(normal1 + normal2) );
+                float3 normal = mul( Tangent2Normal, normalize( normal1 + normal2 ));
 
                 // When the current fragment is not water dont use normal from normal map
-                if( i.terrainProperty.y > _WaterLevel | _WaterLevel == 0) {
+                if( i.terrainProperty.y > _WaterLevel | _WaterLevel == 0 ) {
                     normal = i.normal;
                 }
 
@@ -142,22 +142,22 @@ Shader "Custom/TerrainShaderPointLight"
                 float3 lightDirection = normalize( _LightSource - i.worldPosition );
 
                 fixed4 vAmbient = UNITY_LIGHTMODEL_AMBIENT;                                             // Ambient Light
-                fixed4 vDiffuse = max(0, dot( lightDirection, normal )) * _LightColor;           // Diffuse Light (Labmert)
+                fixed4 vDiffuse = max( 0, dot( lightDirection, normal )) * _LightColor;           // Diffuse Light (Labmert)
 
-                float3 reflectedLightVector = reflect( normalize(-lightDirection.xyz), normal );  // Specular Light (Phong)
+                float3 reflectedLightVector = reflect( normalize( -lightDirection.xyz ), normal );  // Specular Light (Phong)
                 float x = max( 0, dot( reflectedLightVector, i.vectorToCamera ));
                 fixed4 vSpecular = pow( x, _Shininess ) * _LightColor;
 
                 // If light shines on backside of vertex -> no specular reflection
                 if( dot( lightDirection, normal ) < 0 ) {
-                    vSpecular = fixed4(0, 0, 0, 0);
+                    vSpecular = fixed4( 0, 0, 0, 0 );
                 }
 
                 // Get color based on (moisture, displacement) from ColorTexture
                 fixed4 color = tex2D( _ColorTexture, i.terrainProperty );
 
                 // Set the color to water if beyond the water level
-                if( i.terrainProperty.y < _WaterLevel & _WaterLevel != 0) {
+                if( i.terrainProperty.y < _WaterLevel & _WaterLevel != 0 ) {
                     color = _WaterColor;
                 }
 

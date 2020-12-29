@@ -21,11 +21,11 @@ public class TerrainGenerator : MonoBehaviour
 
         // Generate Displacement Texture with Diamond Square
         ds = new DiamondSquare();
-        Texture2D displacementTex = ds.diamondSquare( GenerateTextureSize, Random.Range( 1, 200000 ) );
+        Texture2D displacementTex = ds.diamondSquare( GenerateTextureSize, Random.Range( 1, 200000 ));
 
         // Generate moisture texture with perlin noise
         mg = new MoistureGenerator();
-        int pixelSize = (int) Mathf.Pow(2, GenerateTextureSize);
+        int pixelSize = (int) Mathf.Pow( 2, GenerateTextureSize );
         mg.Init( pixelSize, pixelSize, 0, 0, 10 );
         mg.CalcNoise();
         Texture2D moistureTex = mg.NoiseTex;
@@ -40,8 +40,8 @@ public class TerrainGenerator : MonoBehaviour
         moistureTex.Apply();
 
         // Set random terrain values
-        renderer.material.SetFloat( "_WaterLevel", Random.Range(0.0f, MaxWaterLevel) );
-        renderer.material.SetColor( "_WaterColor", new Color( Random.Range(0.0f, 1.0f), Random.Range(0.0f, 1.0f), Random.Range(0.0f, 1.0f) ) );
+        renderer.material.SetFloat( "_WaterLevel", Random.Range( 0.0f, MaxWaterLevel ));
+        renderer.material.SetColor( "_WaterColor", new Color( Random.Range( 0.0f, 1.0f ), Random.Range( 0.0f, 1.0f ), Random.Range( 0.0f, 1.0f )));
     }
 
     // Update is called once per frame

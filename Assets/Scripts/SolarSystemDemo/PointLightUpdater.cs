@@ -11,7 +11,7 @@ public class PointLightUpdater : MonoBehaviour {
     void Start()
     {
         renderer = GetComponent<Renderer>();
-        pointLight = gameObject.transform.parent.Find("Sun").Find("Point Light").GetComponent<Light>();
+        pointLight = gameObject.transform.parent.Find( "Sun" ).Find( "Point Light" ).GetComponent<Light>();
     }
 
     // Update is called once per frame

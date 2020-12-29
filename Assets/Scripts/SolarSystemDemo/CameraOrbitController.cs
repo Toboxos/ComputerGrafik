@@ -30,7 +30,7 @@ public class CameraOrbitController : MonoBehaviour
             Ray ray = cam.ScreenPointToRay( Input.mousePosition );
             RaycastHit hit;
 
-            if( Physics.Raycast( ray, out hit, 100000 ) ) {
+            if( Physics.Raycast( ray, out hit, 100000 )) {
                 target = hit.transform;
             }
         }
@@ -48,6 +48,6 @@ public class CameraOrbitController : MonoBehaviour
             prevPos = cam.ScreenToViewportPoint( Input.mousePosition );
         }
 
-        cam.transform.Translate( new Vector3(0, 0, -zoom) );
+        cam.transform.Translate( new Vector3( 0, 0, -zoom ) );
     }
 }
