@@ -7,8 +7,8 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Terrain
-  m_Shader: {fileID: 4800000, guid: b5b5975b95ecf4f40b76ea46375a685c, type: 3}
+  m_Name: WaterBottom
+  m_Shader: {fileID: 4800000, guid: 563cd8c1d3b40f941af35c7bb3c33a4e, type: 3}
   m_ShaderKeywords: 
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
@@ -19,14 +19,6 @@ Material:
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
-    - ColorTexture:
-        m_Texture: {fileID: 2800000, guid: 508bf8684c3501348aaa6d8271db3ae6, type: 3}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - DisplacementTexture:
-        m_Texture: {fileID: 2800000, guid: ad85d1315bfa0d8489baf225252407ac, type: 3}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
     - _BumpMap:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
@@ -50,7 +42,7 @@ Material:
     - _DisplacementTexture:
         m_Texture: {fileID: 2800000, guid: 7d9c39f9f90898043b6381dafc231e4b, type: 3}
         m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _EmissionMap:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
@@ -67,10 +59,6 @@ Material:
         m_Texture: {fileID: 2800000, guid: a5bad90b9f9158247a9264c700698b48, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
-    - _NormalMapTexture:
-        m_Texture: {fileID: 2800000, guid: f9107e0b1d6b3d24baf03242a3467785, type: 3}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 1.19, y: 2}
     - _NormalMapTexture1:
         m_Texture: {fileID: 2800000, guid: 2873e1d5d49f5ba4aa0fc07e92c5f082, type: 3}
         m_Scale: {x: 1, y: 1}
@@ -88,41 +76,33 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Floats:
-    - Albedo: 0.2
-    - DisplacementOffset: 1
-    - Scale: 0.1
-    - _Albedo: 0.954
-    - _AmbientReflectivity: 0.5
+    - _AmbientReflectivity: 1
     - _BumpScale: 1
     - _Cutoff: 0.5
     - _DetailNormalMapScale: 1
-    - _DiffuseReflectivity: 0.61
-    - _DisplacementOffset: 0.57
-    - _DisplacementScale: 2
+    - _DiffuseReflectivity: 0.91
+    - _DisplacementOffset: 0
+    - _DisplacementScale: 0
     - _DstBlend: 0
-    - _FluidThreshold: 0.351
     - _GlossMapScale: 1
     - _Glossiness: 0.5
     - _GlossyReflections: 1
-    - _Ka: 0.5
-    - _Kd: 0.5
     - _Metallic: 0
     - _Mode: 0
     - _OcclusionStrength: 1
     - _Parallax: 0.02
-    - _Shininess: 64.2
+    - _Shininess: 30.9
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
     - _SpecularReflectivity: 1
     - _SrcBlend: 1
     - _UVSec: 0
-    - _WaterLevel: 0.14
-    - _WaveAnimationSpeed: 2.64
-    - _X: 0
-    - _Y: 0
+    - _WaterLevel: 1
+    - _WaveAnimationSpeed: 1
     - _ZWrite: 1
     m_Colors:
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
-    - _LightPos: {r: 0, g: 0, b: 0, a: 1}
-    - _WaterColor: {r: 0.3274582, g: 0.031241894, b: 0.7393743, a: 1}
+    - _LightColor: {r: 1, g: 1, b: 1, a: 1}
+    - _LightSource: {r: 0, g: -10000, b: 0, a: 1}
+    - _WaterColor: {r: 0.20803669, g: 0.42346746, b: 0.8018868, a: 1}

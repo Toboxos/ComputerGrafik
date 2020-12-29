@@ -7,6 +7,7 @@ public class TerrainGenerator : MonoBehaviour
     // Start is called before the first frame update
 
     public int GenerateTextureSize = 8;
+    public float MaxWaterLevel = 0.7f;
 
     public Material matPrefab;
     private DiamondSquare ds;
@@ -39,7 +40,7 @@ public class TerrainGenerator : MonoBehaviour
         moistureTex.Apply();
 
         // Set random terrain values
-        renderer.material.SetFloat( "_WaterLevel", Random.Range(0.0f, 0.7f) );
+        renderer.material.SetFloat( "_WaterLevel", Random.Range(0.0f, MaxWaterLevel) );
         renderer.material.SetColor( "_WaterColor", new Color( Random.Range(0.0f, 1.0f), Random.Range(0.0f, 1.0f), Random.Range(0.0f, 1.0f) ) );
     }
 

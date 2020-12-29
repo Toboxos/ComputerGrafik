@@ -155,7 +155,7 @@ Shader "Custom/TerrainShaderPointLight"
                 fixed4 color = tex2D( _ColorTexture, i.terrainProperty );
 
                 // Set the color to water if beyond the water level
-                if( i.terrainProperty.y <= _WaterLevel ) {
+                if( i.terrainProperty.y < _WaterLevel ) {
                     color = _WaterColor;
                 }
 

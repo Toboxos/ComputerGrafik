@@ -2,7 +2,7 @@ Shader "Custom/TerrainShader"
 {
     Properties
     {
-        _DisplacementScale( "Displacement Scale", Range(0, 100) ) = 1
+        _DisplacementScale( "Displacement Scale", Range(0, 1000) ) = 1
         _DisplacementOffset( "Displacement Offset", Range(0, 1) ) = 0.5
         _Shininess( "Shininess", Range(1, 100) ) = 1.0
         _WaterLevel( "Height of Water Level", Range(0, 1) ) = 0.8
@@ -148,7 +148,7 @@ Shader "Custom/TerrainShader"
                 fixed4 color = tex2D( _ColorTexture, i.terrainProperty );
 
                 // Set the color to water if beyond the water level
-                if( i.terrainProperty.y <= _WaterLevel ) {
+                if( i.terrainProperty.y < _WaterLevel ) {
                     color = _WaterColor;
                 }
 
