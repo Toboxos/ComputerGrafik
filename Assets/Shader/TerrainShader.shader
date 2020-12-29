@@ -3,7 +3,6 @@ Shader "Custom/TerrainShader"
     Properties
     {
         _DisplacementScale( "Displacement Scale", Range( 0, 1000 ) ) = 1
-        _DisplacementOffset( "Displacement Offset", Range( 0, 1 ) ) = 0.5
         _Shininess( "Shininess", Range( 1, 100 ) ) = 1.0
         _WaterLevel( "Height of Water Level", Range( 0, 1 ) ) = 0.8
 
