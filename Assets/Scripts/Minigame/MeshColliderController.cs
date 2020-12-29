@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using UnityEngine;
 
 [ExecuteInEditMode]
@@ -16,12 +17,16 @@ public class MeshColliderController : MonoBehaviour
         mesh = Instantiate<Mesh>( GetComponent<MeshFilter>().sharedMesh );
 
         Vector3[] verts = mesh.vertices;
-        Debug.Log( "Start" );
-        for( int i = 0; i < 400; ++i ) {
-            verts[i] += new Vector3(0, Random.Range(1.5f, 2.5f), 0);
+        Stopwatch stopwatch = new Stopwatch();
+
+        stopwatch.Start();
+        for( int i = 0; i < verts.Length; ++i ) {
+            verts[i] += new Vector3(0, Random.Range(10.0f, 20.0f), 0);
         }
         mesh.vertices = verts;
-        Debug.Log( "Stop" );
+        stopwatch.Stop();
+
+        UnityEngine.Debug.Log( stopwatch.ElapsedMilliseconds + "ms elapsed" );
 
         collider.sharedMesh = mesh;
     }
