@@ -38,7 +38,7 @@ public class MeshColliderController : MonoBehaviour
         stopwatch.Start();
         for( int i = 0; i < verts.Length; ++i ) {
             Vector3 vert = verts[i];
-            if( Mathf.Abs(vert.x) > 0.2 || Mathf.Abs(vert.z) > 0.2 ) continue;
+            if( Mathf.Abs( vert.x ) > 0.2 || Mathf.Abs( vert.z ) > 0.2 ) continue;
 
             Color displacementColor = displacementTex.GetPixelBilinear( uv[i].x + offset.x, uv[i].y + offset.y );
             verts[i] = new Vector3( vert.x, displacementColor.r * displacementScale , vert.z );
