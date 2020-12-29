@@ -9,12 +9,7 @@ public class PlayerController : MonoBehaviour
     Animator animator;
 
     public float Speed = 1;
-    //Game Idea Player Speeds Up over Time and Must Avoid Obstacles
-    // Or gets Followed by Homeing Missles
-    float Acceleration;
-
     public bool isUboat = true;
-
     public float PitchSpeed = 15;
 
     //Uboat
@@ -23,6 +18,11 @@ public class PlayerController : MonoBehaviour
 
     //Plane
     public float PlaneRollSpeed = 10;
+
+    public GameObject Terrain;
+
+    private Vector2 LastPositon;
+    private Vector2 Position;
 
     // Start is called before the first frame update
     void Start()
@@ -94,5 +94,31 @@ public class PlayerController : MonoBehaviour
                 rigidbody.MoveRotation(rigidbody.rotation * deltaRotation);
             }
         }
+
+        //Handle Movement of Terrain
+        Renderer renderer = Terrain.GetComponent<Renderer>();
+        float pixelWidth = 1 / Mathf.Pow(2, Terrain.GetComponent<TerrainGenerator>().GenerateTextureSize);
+
+        //Add Delta Movement to Positon
+        Position += new Vector2(transform.position.x - LastPositon.x, transform.position.z - LastPositon.y);
+
+        //Clamp Player Position Between Pixels via Float Modulo
+        float xPos = Position.x - Mathf.Floor(Position.x / (pixelWidth * renderer.bounds.size.x)) * (pixelWidth * renderer.bounds.size.x);
+        float yPos = Position.y - Mathf.Floor(Position.y / (pixelWidth * renderer.bounds.size.z)) * (pixelWidth * renderer.bounds.size.z);
+
+        transform.position = new Vector3(xPos, transform.position.y, yPos);
+        LastPositon = new Vector2(transform.position.x, transform.position.z);
+
+        //Convert Player to Texture Coordinates with Scale
+        Vector2 PlayerOffset = new Vector2(Position.x / renderer.bounds.size.x, Position.y / renderer.bounds.size.z);
+        
+        //Clamp Vertices to Pixels to avoid Wobelling
+        //And move in Negative Offset to create the illusion of Movement
+        PlayerOffset.x = -Mathf.Ceil(PlayerOffset.x / pixelWidth) * pixelWidth;
+        PlayerOffset.y = -Mathf.Ceil(PlayerOffset.y / pixelWidth) * pixelWidth;
+
+        renderer.material.SetTextureOffset("_DisplacementTexture", PlayerOffset);
+        renderer.material.SetTextureOffset("_MoistureTexture", PlayerOffset);
+
     }
 }
