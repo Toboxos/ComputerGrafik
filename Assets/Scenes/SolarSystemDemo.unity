@@ -169,8 +169,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4bbec251fa2d6444e9161c1708b67101, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  GenerateTextureSize: 8
+  MaxWaterLevel: 0.7
   matPrefab: {fileID: 2100000, guid: 68ba8f40b69fe1c4d9178fa4327f24b8, type: 2}
-  Player: {fileID: 0}
 --- !u!114 &40268557
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -304,8 +305,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4bbec251fa2d6444e9161c1708b67101, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  GenerateTextureSize: 8
+  MaxWaterLevel: 0.7
   matPrefab: {fileID: 2100000, guid: 68ba8f40b69fe1c4d9178fa4327f24b8, type: 2}
-  Player: {fileID: 0}
 --- !u!114 &126167513
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -663,8 +665,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4bbec251fa2d6444e9161c1708b67101, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  GenerateTextureSize: 8
+  MaxWaterLevel: 0.7
   matPrefab: {fileID: 2100000, guid: 68ba8f40b69fe1c4d9178fa4327f24b8, type: 2}
-  Player: {fileID: 0}
 --- !u!114 &521635699
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -858,7 +861,7 @@ Light:
   serializedVersion: 10
   m_Type: 2
   m_Shape: 0
-  m_Color: {r: 0.05490196, g: 0.05490196, b: 0.05490196, a: 1}
+  m_Color: {r: 0.8867924, g: 0.8867924, b: 0.8867924, a: 1}
   m_Intensity: 1
   m_Range: 10
   m_SpotAngle: 30
@@ -991,8 +994,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4bbec251fa2d6444e9161c1708b67101, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  GenerateTextureSize: 8
+  MaxWaterLevel: 0.7
   matPrefab: {fileID: 2100000, guid: 68ba8f40b69fe1c4d9178fa4327f24b8, type: 2}
-  Player: {fileID: 0}
 --- !u!114 &1349835653
 MonoBehaviour:
   m_ObjectHideFlags: 0

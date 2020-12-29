@@ -137,7 +137,7 @@ Shader "Custom/TerrainShaderPointLight"
                 }
 
                 // Get the direction where the light rays from the light source are coming
-                float3 lightDirection = _LightSource - i.worldPosition;
+                float3 lightDirection = normalize( _LightSource - i.worldPosition );
 
                 fixed4 vAmbient = UNITY_LIGHTMODEL_AMBIENT;                                             // Ambient Light
                 fixed4 vDiffuse = max(0, dot( lightDirection, normal )) * _LightColor;           // Diffuse Light (Labmert)
