@@ -6,10 +6,11 @@ public class TerrainGenerator : MonoBehaviour
 {
     // Start is called before the first frame update
 
+    public int GenerateTextureSize = 8;
+
     public Material matPrefab;
     private DiamondSquare ds;
     private MoistureGenerator mg;
-    public Transform Player;
 
     //Texture2D defaultTexture;
     void Start()
@@ -17,15 +18,13 @@ public class TerrainGenerator : MonoBehaviour
         Material newMat = Object.Instantiate( matPrefab );
         Renderer renderer = GetComponent<Renderer>();
 
-        int Size = 8;
-
         // Generate Displacement Texture with Diamond Square
         ds = new DiamondSquare();
-        Texture2D displacementTex = ds.diamondSquare( Size, Random.Range( 1, 200000 ) );
+        Texture2D displacementTex = ds.diamondSquare( GenerateTextureSize, Random.Range( 1, 200000 ) );
 
         // Generate moisture texture with perlin noise
         mg = new MoistureGenerator();
-        int pixelSize = (int) Mathf.Pow(2, Size);
+        int pixelSize = (int) Mathf.Pow(2, GenerateTextureSize);
         mg.Init( pixelSize, pixelSize, 0, 0, 10 );
         mg.CalcNoise();
         Texture2D moistureTex = mg.NoiseTex;
@@ -46,17 +45,6 @@ public class TerrainGenerator : MonoBehaviour
 
     // Update is called once per frame
     void Update()
-    {
-        // Renderer renderer = GetComponent<Renderer>();
-
-        // float pixelWidth = 1 / Mathf.Pow(2, 8);
-
-        // Vector2 PlayerOffset = new Vector2(Player.position.x/renderer.bounds.size.x, Player.position.z/ renderer.bounds.size.z);
-        
-        // PlayerOffset.x = Mathf.Ceil( PlayerOffset.x / pixelWidth ) * pixelWidth;
-        // PlayerOffset.y = Mathf.Ceil( PlayerOffset.y / pixelWidth ) * pixelWidth;
-
-        // renderer.material.SetTextureOffset( "_DisplacementTexture",  PlayerOffset);
-        // renderer.material.SetTextureOffset( "_MoistureTexture", PlayerOffset);
+    {       
     }
 }

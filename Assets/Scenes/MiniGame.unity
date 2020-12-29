@@ -294,7 +294,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4bbec251fa2d6444e9161c1708b67101, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  matPrefab: {fileID: 0}
+  GenerateTextureSize: 8
+  matPrefab: {fileID: 2100000, guid: bdd9b91c46743044aa4ffc03e3181249, type: 2}
 --- !u!1 &705507993
 GameObject:
   m_ObjectHideFlags: 0
@@ -500,6 +501,7 @@ MonoBehaviour:
   ResetTurningRate: 50
   UboatYawSpeed: 15
   PlaneRollSpeed: 20
+  Terrain: {fileID: 490400068}
 --- !u!54 &1719167184
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -633,7 +635,12 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 99d5c97e8fb0cde42ba155b8df58e291,
         type: 3}
       propertyPath: m_Name
-      value: plane
+      value: Generated Content
+      objectReference: {fileID: 0}
+    - target: {fileID: 8164078558771037576, guid: 99d5c97e8fb0cde42ba155b8df58e291,
+        type: 3}
+      propertyPath: m_Name
+      value: Terrain
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 99d5c97e8fb0cde42ba155b8df58e291, type: 3}
