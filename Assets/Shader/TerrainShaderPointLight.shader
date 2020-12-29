@@ -76,8 +76,8 @@ Shader "Custom/TerrainShaderPointLight"
                 o.uvCoord = uv;
 
                 // Displacement Wert aus Textur
-                fixed displacement = tex2Dlod( _DisplacementTexture, float4(TRANSFORM_TEX(uv, _DisplacementTexture), 0, 0) ).x;
-                fixed moisture = tex2Dlod( _MoistureTexture, float4(TRANSFORM_TEX(uv, _MoistureTexture), 0, 0) ).x;
+                fixed displacement = tex2Dlod( _DisplacementTexture, float4(TRANSFORM_TEX(uv, _DisplacementTexture), 0, 0) ).r;
+                fixed moisture = tex2Dlod( _MoistureTexture, float4(TRANSFORM_TEX(uv, _MoistureTexture), 0, 0) ).r;
 
                 // Moisture and displacement are used for accessing the color texture
                 o.terrainProperty = float2( moisture, displacement );
@@ -106,7 +106,7 @@ Shader "Custom/TerrainShaderPointLight"
                 // Use world position, where vertex is already scaled by model scale. Add the displacement to the scaled vertex position
                 // (otherwise displacement would be scaled too: scale * (vertex.pos + displacement))
                 o.vertex.w = 1;
-                o.vertex.xyz = o.worldPosition + normalize( o.normal ) * displacement * _DisplacementScale;
+                o.vertex.xyz = o.worldPosition + normalize( o.normal ) * displacement * _DisplacementScale * 2.0; // Multiply by ~2.0 to match unity transform units
 
                 // Transform to projection space
                 o.vertex = mul( UNITY_MATRIX_VP, o.vertex );
