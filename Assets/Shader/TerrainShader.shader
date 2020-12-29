@@ -111,10 +111,10 @@ Shader "Custom/TerrainShader"
             fixed4 frag( v2f i ) : SV_Target {
 
                 // Read and normalize normals from both water normal maps
-                fixed3 val1 = tex2D( _NormalMapTexture1, i.uvCoord + _WaveAnimationSpeed * _Time.xx ).rgb;
+                fixed3 val1 = tex2D( _NormalMapTexture1, i.uvCoord * float2(10, 10) + _WaveAnimationSpeed * _Time.xx ).rgb;
                 float3 normal1 = normalize( val1 * 2.0 - 1.0 );
 
-                fixed3 val2 = tex2D( _NormalMapTexture2, i.uvCoord + _WaveAnimationSpeed * -_Time.xx ).rgb;
+                fixed3 val2 = tex2D( _NormalMapTexture2, i.uvCoord * float2(10, 10) + _WaveAnimationSpeed * -_Time.xx ).rgb;
                 float3 normal2 = normalize( val2 * 2.0 - 1.0 );
 
                 // Matrix for converting tangent to normal space
