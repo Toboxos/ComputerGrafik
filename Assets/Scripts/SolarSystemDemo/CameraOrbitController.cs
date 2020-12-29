@@ -16,7 +16,7 @@ public class CameraOrbitController : MonoBehaviour
         Camera cam = Camera.main;
 
         // Handle zooming
-        zoom += -Input.mouseScrollDelta.y * 2;
+        zoom += -Input.mouseScrollDelta.y;
         if( zoom < 1 ) {
             zoom = 1;
         }

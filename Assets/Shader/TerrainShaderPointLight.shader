@@ -104,7 +104,7 @@ Shader "Custom/TerrainShaderPointLight"
                 // Use world position, where vertex is already scaled by model scale. Add the displacement to the scaled vertex position
                 // (otherwise displacement would be scaled too: scale * (vertex.pos + displacement))
                 o.vertex.w = 1;
-                o.vertex.xyz = o.worldPosition + normalize( o.normal ) * ( displacement / 255 ) * _DisplacementScale * 500; // 500 ~ size of 1 unit in unity
+                o.vertex.xyz = o.worldPosition + normalize( o.normal ) * displacement * _DisplacementScale;
 
                 // Transform to projection space
                 o.vertex = mul( UNITY_MATRIX_VP, o.vertex );
