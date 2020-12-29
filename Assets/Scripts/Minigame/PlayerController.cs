@@ -9,7 +9,7 @@ public class PlayerController : MonoBehaviour
     Animator animator;
 
     public float Speed = 1;
-    public bool isUboat = true;
+    private bool isUboat = true;
     public float PitchSpeed = 15;
 
     //Uboat
@@ -20,6 +20,7 @@ public class PlayerController : MonoBehaviour
     public float PlaneRollSpeed = 10;
 
     public GameObject Terrain;
+    public Transform WaterPlane;
 
     private Vector2 LastPositon;
     private Vector2 Position;
@@ -44,6 +45,15 @@ public class PlayerController : MonoBehaviour
     {
         rigidbody.velocity = transform.forward * Speed;
         animator.SetBool("isUboat", isUboat);
+
+        if(WaterPlane.position.y > transform.position.y)
+        {
+            isUboat = true;
+        }
+        else
+        {
+            isUboat = false;
+        }
 
         if (isUboat)
         {

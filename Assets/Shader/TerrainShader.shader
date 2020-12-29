@@ -23,7 +23,9 @@ Shader "Custom/TerrainShader"
     SubShader
     {
 
-        Tags { "RenderType"="Opaque" }
+        Tags { "Queue" = "Transparent" }
+		Blend SrcAlpha OneMinusSrcAlpha
+		ColorMask RGB
         LOD 100
 
         Pass
@@ -128,7 +130,7 @@ Shader "Custom/TerrainShader"
                 float3 normal = mul( Tangent2Normal, normalize(normal1 + normal2) );
 
                 // When the current fragment is not water dont use normal from normal map
-                if( i.terrainProperty.y > _WaterLevel ) {
+                if( i.terrainProperty.y > _WaterLevel | _WaterLevel == 0) {
                     normal = i.normal;
                 }
 
@@ -148,7 +150,7 @@ Shader "Custom/TerrainShader"
                 fixed4 color = tex2D( _ColorTexture, i.terrainProperty );
 
                 // Set the color to water if beyond the water level
-                if( i.terrainProperty.y < _WaterLevel ) {
+                if( i.terrainProperty.y < _WaterLevel & _WaterLevel != 0) {
                     color = _WaterColor;
                 }
 
@@ -157,8 +159,8 @@ Shader "Custom/TerrainShader"
                     vSpecular *= 0.0001;
                 }
 
-                // Calculated new light color based on ambient, diffuse and specular light
-                color *= ( _AmbientReflectivity * vAmbient + _DiffuseReflectivity * vDiffuse );
+                // Calculated new light color based on ambient, diffuse and specular light and Keep Alpha
+                color *= float4( _AmbientReflectivity * vAmbient + _DiffuseReflectivity * vDiffuse.rgb, color.a);
                 color += _SpecularReflectivity * vSpecular;
 
                 return color;
